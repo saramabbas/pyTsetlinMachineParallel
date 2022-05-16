@@ -36,6 +36,8 @@ https://arxiv.org/abs/1905.09688
 
 #include "ConvolutionalTsetlinMachine.h"
 
+// FILE *fptr;
+
 struct TsetlinMachine *CreateTsetlinMachine(int number_of_clauses, int number_of_features, int number_of_patches, int number_of_ta_chunks, int number_of_state_bits, int T, double s, double s_range, int boost_true_positive_feedback, int weighted_clauses)
 {
 	/* Set up the Tsetlin Machine structure */
@@ -105,6 +107,8 @@ void tm_initialize(struct TsetlinMachine *tm)
 		}
 		tm->clause_weights[j] = 1;
 	}
+	
+	// fptr = fopen("TA_state.txt","a");
 }
 
 void tm_destroy(struct TsetlinMachine *tm)
@@ -115,6 +119,8 @@ void tm_destroy(struct TsetlinMachine *tm)
 	free(tm->ta_state);
 	free(tm->feedback_to_clauses);
 	free(tm->clause_weights);
+
+	// fclose(fptr);
 }
 
 static inline void tm_initialize_random_streams(struct TsetlinMachine *tm, int clause)
@@ -129,9 +135,9 @@ static inline void tm_initialize_random_streams(struct TsetlinMachine *tm, int c
 	active = active >= n ? n : active;
 	active = active < 0 ? 0 : active;
 	while (active--) {
-		int f = fast_rand() % (tm->number_of_features);
+		int f = getRandomNumber() % (tm->number_of_features);
 		while (tm->feedback_to_la[f / 32] & (1 << (f % 32))) {
-			f = fast_rand() % (tm->number_of_features);
+			f = getRandomNumber() % (tm->number_of_features);
 	    }
 		tm->feedback_to_la[f / 32] |= 1 << (f % 32);
 	}
@@ -255,7 +261,7 @@ static inline void tm_calculate_clause_output(struct TsetlinMachine *tm, unsigne
 
  			tm->clause_output[clause_chunk] |= (1 << clause_chunk_pos);
 
- 			int patch_id = fast_rand() % output_one_patches_count;
+ 			int patch_id = getRandomNumber() % output_one_patches_count;
 	 		tm->clause_patch[j] = tm->output_one_patches[patch_id];
  		}
  	}
@@ -280,7 +286,7 @@ void tm_update_clauses(struct TsetlinMachine *tm, unsigned int *Xi, int class_su
 		unsigned int clause_chunk = j / 32;
 		unsigned int clause_chunk_pos = j % 32;
 
-	 	tm->feedback_to_clauses[clause_chunk] |= (((float)fast_rand())/((float)FAST_RAND_MAX) <= (1.0/(tm->T*2))*(tm->T + (1 - 2*target)*class_sum)) << clause_chunk_pos;
+	 	tm->feedback_to_clauses[clause_chunk] |= (((float)getRandomNumber())/((float)FAST_RAND_MAX) <= (1.0/(tm->T*2))*(tm->T + (1 - 2*target)*class_sum)) << clause_chunk_pos;
 	}
 
 	for (int j = 0; j < tm->number_of_clauses; j++) {
@@ -407,20 +413,23 @@ int tm_ta_action(struct TsetlinMachine *tm, int clause, int ta)
 /*****************************************************/
 /*** Storing and Loading of Tsetlin Machine State ****/
 /*****************************************************/
-
 void tm_get_ta_state(struct TsetlinMachine *tm, unsigned int *ta_state)
 {
 	int pos = 0;
 	for (int j = 0; j < tm->number_of_clauses; ++j) {
+		// fprintf( fptr,"Clause = %d \n", j);
 		for (int k = 0; k < tm->number_of_ta_chunks; ++k) {
+			// fprintf(fptr,"Clause = %d, ta_chunk_number = %d: ",j, k);
 			for (int b = 0; b < tm->number_of_state_bits; ++b) {
 				ta_state[pos] = tm->ta_state[pos];
+				// fprintf(fptr,"%d ", ta_state[pos]);
 				pos++;
 			}
+			// fprintf(fptr,"\n");
 		}
 	}
-}
 
+}
 void tm_set_ta_state(struct TsetlinMachine *tm, unsigned int *ta_state)
 {
 	int pos = 0;
@@ -504,7 +513,7 @@ void tm_update_regression(struct TsetlinMachine *tm, unsigned int *Xi, int targe
 		unsigned int clause_chunk = j / 32;
 		unsigned int clause_chunk_pos = j % 32;
 
-	 	tm->feedback_to_clauses[clause_chunk] |= (((float)fast_rand())/((float)FAST_RAND_MAX) <= pow(1.0*prediction_error/tm->T, 2)) << clause_chunk_pos;
+	 	tm->feedback_to_clauses[clause_chunk] |= (((float)getRandomNumber())/((float)FAST_RAND_MAX) <= pow(1.0*prediction_error/tm->T, 2)) << clause_chunk_pos;
 	}
 
 	for (int j = 0; j < tm->number_of_clauses; j++) {

@@ -26,6 +26,7 @@ https://arxiv.org/abs/1905.09688
 */
 
 #include "ConvolutionalTsetlinMachine.h"
+int initialized = 0;
 
 struct MultiClassTsetlinMachine {
 	int number_of_classes;
