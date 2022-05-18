@@ -54,7 +54,7 @@ struct MultiClassTsetlinMachine *CreateMultiClassTsetlinMachine(int number_of_cl
 	mc_tm->number_of_ta_chunks = number_of_ta_chunks;
 
 	mc_tm->number_of_state_bits = number_of_state_bits;
-	
+
 
 	if (initialized == 0) {
 		initialized = 1;
@@ -80,6 +80,8 @@ void mc_tm_destroy(struct MultiClassTsetlinMachine *mc_tm)
 		free(mc_tm->tsetlin_machines[i]);
 	}
 	free(mc_tm->tsetlin_machines);
+
+	initialized=1;
 }
 
 /***********************************/

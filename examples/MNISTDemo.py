@@ -23,14 +23,13 @@ print("Program Starting ...\n")
 original_stdout = sys.stdout # Save a reference to the original standard output
 with open('dataResult_orignal_attempt.txt', 'a') as f:
 	sys.stdout = f # Change the standard output to the file we created.
-	print("r = 1,000,000 - 16/05/2020 - init once",flush=True)
+	print("r = 1,000,000 - 18/05/2020 - init once",flush=True)
 	# print("TAstates \n", file=LogTAState)
 	
-	for clauses in [2000,2000,2000,2000]:
-		for s in [10]:
+	for clauses in [2000]:
+		for s in [15,12]:
 			tm = MultiClassTsetlinMachine(clauses, 50, s)
-			print("Clauses =", clauses, ",s =",s,flush=True)
-
+			print("Clauses=",clauses,", s=",s,flush=True)
 			for i in range(250):
 				start_training = time()
 				tm.fit(X_train, Y_train, epochs=1, incremental=True)
