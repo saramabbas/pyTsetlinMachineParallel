@@ -250,6 +250,8 @@ class MultiClassTsetlinMachine():
 		else:
 			self.s_range = s
 
+		
+
 	def __getstate__(self):
 		state = self.__dict__.copy()
 		state['mc_tm_state'] = self.get_state()

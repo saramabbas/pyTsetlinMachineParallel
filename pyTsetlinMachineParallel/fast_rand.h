@@ -64,6 +64,7 @@ int RandomNumberArray[THREADS][TOTAL_RANDOM_NUMBERS];
 int accessCount[THREADS];
 int usedCounter;
 
+
 void initRandomNumArray()
 {   
     clock_t start = clock();

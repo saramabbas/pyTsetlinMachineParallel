@@ -3,7 +3,7 @@ from setuptools import *
 libTM = Extension('libTM',
                   sources = ['pyTsetlinMachineParallel/ConvolutionalTsetlinMachine.c', 'pyTsetlinMachineParallel/MultiClassConvolutionalTsetlinMachine.c', 'pyTsetlinMachineParallel/Tools.c'],
                   include_dirs=['pyTsetlinMachineParallel'],
-                  extra_compile_args=['-fopenmp', '-fsanitize=thread', "-g",],
+                  extra_compile_args=['-fopenmp'],
                   extra_link_args=['-lgomp'])
 
 setup(
