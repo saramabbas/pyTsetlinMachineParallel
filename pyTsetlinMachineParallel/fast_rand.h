@@ -9,7 +9,7 @@
 
 #define SARAM_RAND_MAX UINT32_MAX
 #define THREADS 10 
-#define TOTAL_RANDOM_NUMBERS 100000
+#define TOTAL_RANDOM_NUMBERS 50000
 
 static uint64_t const multiplier = 6364136223846793005u;
 static uint64_t       mcg_state  = 0xcafef00dd15ea5e5u;

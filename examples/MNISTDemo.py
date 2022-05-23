@@ -30,7 +30,7 @@ with open('dataResult_orignal_attempt.txt', 'a') as f:
 		for s in [10]:
 			tm = MultiClassTsetlinMachine(clauses, 50, s)
 			print("Clauses=",clauses,", s=",s,flush=True)
-			for i in range(500):
+			for i in range(250):
 				start_training = time()
 				tm.fit(X_train, Y_train, epochs=1, incremental=True)
 				stop_training = time()

@@ -28,6 +28,7 @@ https://arxiv.org/abs/1905.09688
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#include <time.h>
 
 #include "MultiClassConvolutionalTsetlinMachine.h"
 
@@ -195,17 +196,11 @@ void mc_tm_fit(struct MultiClassTsetlinMachine *mc_tm, unsigned int *X, int *y, 
 
 	for (int epoch = 0; epoch < epochs; epoch++) {
 		#pragma omp parallel for
-		// int start_clock = clock();
 		for (int l = 0; l < number_of_examples; l++) {
 			int thread_id = omp_get_thread_num();
 			unsigned int pos = l*step_size;
-
 			mc_tm_update(mc_tm_thread[thread_id], &X[pos], y[l]);
-		// int end_clock = clock();
-
-		// printf("Thread %d total time: %lf\n", omp_get_thread_num(), (double)(end_clock - start_clock));
 		}
-		
 	}
 
 	for (int i = 0; i < mc_tm->number_of_classes; i++) {
